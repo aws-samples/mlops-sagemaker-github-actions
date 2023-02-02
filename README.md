@@ -11,8 +11,6 @@ In this example, we will automate a model-build pipeline that includes steps for
 ## Prerequisites
 The followings are prerequisites to completing the steps in this example:
 
-### Create a Custom Project Template in SageMaker
-
 
 ### Setup a CodeStar Connection
 
@@ -52,7 +50,7 @@ In order to create a manual approval step in our deployment pipelines, we use [G
 ### Create an AWS Lambda layer
 
 
-### Launch the SageMaker Project
+### Create a Custom Project Template in SageMaker
 If the SageMaker-provided templates do not meet your needs (for example, you want to have more complex orchestration in the CodePipeline with multiple stages or custom approval steps), create your own templates.
 We recommend starting by using SageMaker-provided templates to understand how to organize your code and resources and build on top of it. https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-templates-custom.html
 
@@ -123,16 +121,10 @@ To do this, after you enable administrator access to the SageMaker templates,
 29-	Choose Add access.
 
 
-### Creating your project
+### Launch your project
 
 In the previous sections, you prepared the Custom MLOps project environment. The next step is to create a project using your new template.
 
-Sign in to the console with the data science account.
-On the SageMaker console, open SageMaker Studio with your user.
-Choose the Components and registries
-On the drop-down menu, choose Projects.
-Choose Create project.
-Now go to SageMaker studio, choose Project from the left hand side ![alt text](https://github.com/aws-samples/mlops-sagemaker-github-actions/blob/main/img/img3.png)
 
 
 ## Security
