@@ -13,10 +13,10 @@ The followings are prerequisites to completing the steps in this example:
 
 
 ### Setup a CodeStar Connection
-
+TBA
 
 ### Secret Access Keys for GitHub Token
-
+TBA
 
 ### Create an IAM user for GitHub Actions
 In order to give permission to the GitHub Actions to deploy the SageMaker endpoints in your AWS environment, you need to create an IAM user.
@@ -36,7 +36,7 @@ Copy the contents of the `seedcode` directory in the root of your github reposit
 
 
 #### b) GitHub Secrets
-
+TBA
 
 #### c) GitHub Environments
 In order to create a manual approval step in our deployment pipelines, we use [GitHub Environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment).
@@ -48,7 +48,7 @@ In order to create a manual approval step in our deployment pipelines, we use [G
 
 
 ### Create an AWS Lambda layer
-
+TBA
 
 ### Create a Custom Project Template in SageMaker
 If the SageMaker-provided templates do not meet your needs (for example, you want to have more complex orchestration in the CodePipeline with multiple stages or custom approval steps), create your own templates.
@@ -124,7 +124,7 @@ To do this, after you enable administrator access to the SageMaker templates,
 ### Launch your project
 
 In the previous sections, you prepared the Custom MLOps project environment. The next step is to create a project using your new template.
-
+TBA
 
 
 ## Security
