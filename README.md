@@ -26,13 +26,16 @@ Use `iam/GithubActionsMLOpsExecutionPolicy.json` to provide enough permission to
 
 Next, generate an *Access Key* for this user. You'll use this key in the next step when you set up your GitHub Secrets.
 
+
 ### GitHub Setup
 The following are the steps to prepare your github account to run this example.
+
 
 #### GitHub Repository
 You can reuse an existing github repo for this example. However, it's easier if you create a new repository. This repository is going to contain all the source code for both sagemaker pipeline build and deployments.
 
 Copy the contents of the `seedcode` directory in the root of your github repository. e.g. `.github` directory should be under the root of your github repo.
+
 
 #### GitHub Secrets
 
@@ -44,10 +47,12 @@ In order to create a manual approval step in our deployment pipelines, we use [G
 2. In the *Environment protection rules* select the `Required reviewers` and then add the reviewers. You can choose yourself for this example.
 
 >Note: Environment feature is not available in some types of GitHub plans. Check the documentation [here](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment).
+
+
 ### Create an AWS Lambda layer
 
 
-## Launch the SageMaker Project
+### Launch the SageMaker Project
 If the SageMaker-provided templates do not meet your needs (for example, you want to have more complex orchestration in the CodePipeline with multiple stages or custom approval steps), create your own templates.
 We recommend starting by using SageMaker-provided templates to understand how to organize your code and resources and build on top of it. https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-templates-custom.html
 
@@ -118,7 +123,7 @@ To do this, after you enable administrator access to the SageMaker templates,
 29-	Choose Add access.
 
 
-## Creating your project
+### Creating your project
 
 In the previous sections, you prepared the Custom MLOps project environment. The next step is to create a project using your new template.
 
