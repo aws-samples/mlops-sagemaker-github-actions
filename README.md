@@ -31,16 +31,16 @@ Next, generate an *Access Key* for this user. You'll use this key in the next st
 The following are the steps to prepare your github account to run this example.
 
 
-#### GitHub Repository
+#### a) GitHub Repository
 You can reuse an existing github repo for this example. However, it's easier if you create a new repository. This repository is going to contain all the source code for both sagemaker pipeline build and deployments.
 
 Copy the contents of the `seedcode` directory in the root of your github repository. e.g. `.github` directory should be under the root of your github repo.
 
 
-#### GitHub Secrets
+#### b) GitHub Secrets
 
 
-#### GitHub Environments
+#### c) GitHub Environments
 In order to create a manual approval step in our deployment pipelines, we use [GitHub Environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment).
 
 1. Go to the Settings>Environments menu of your github repository and create a new environment called `production`.
