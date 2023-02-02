@@ -52,6 +52,7 @@ If the SageMaker-provided templates do not meet your needs (for example, you wan
 We recommend starting by using SageMaker-provided templates to understand how to organize your code and resources and build on top of it. https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-templates-custom.html
 
 To do this, after you enable administrator access to the SageMaker templates, 
+
 1-	log in to the https://console.aws.amazon.com/servicecatalog/, 
 
 2-	On the AWS **Service Catalog** console, under Administration, choose **Portfolios**.
