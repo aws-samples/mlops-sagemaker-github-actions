@@ -12,11 +12,13 @@ In this example, we will automate a model-build pipeline that includes steps for
 The followings are prerequisites to completing the steps in this example:
 
 
-### Setup a CodeStar Connection
+### Set up a CodeStar Connection
 TBA
 
-### Secret Access Keys for GitHub Token
-TBA
+### Set up Secret Access Keys for GitHub Token
+We need to create a secret in AWS secret Manager that holds our GitHub personal access token. If you do not have a personal access token for GitHub, you need to create one following the instructions here: create personal access token
+
+Then, go to the AWS Secrets Manager, click on Store a new secret, select “Other type of secret” for Choose Secret type, then give a name to your secret in the “key” and add your personal access token to its associated “value”- click next, type a name for your Secret name and click next and then store.
 
 ### Create an IAM user for GitHub Actions
 In order to give permission to the GitHub Actions to deploy the SageMaker endpoints in your AWS environment, you need to create an IAM user.
@@ -35,8 +37,10 @@ You can reuse an existing github repo for this example. However, it's easier if 
 Copy the contents of the `seedcode` directory in the root of your github repository. e.g. `.github` directory should be under the root of your github repo.
 
 
-#### b) GitHub Secrets
-TBA
+#### b) Set up a GitHub Secrets containing your IAM user access key
+Got your GitHub repository- on the top of repository select Setting- then in the security section go to the Secrets and variables and choose Actions. Choose the New repository secret :
+1- Add the name AWS_ACCESS_KEY_ID and for Secret that you created for the IAM user in the [Create an IAM user for GitHub Actions](https://github.com/aws-samples/mlops-sagemaker-github-actions#create-an-iam-user-for-github-actions) step add your AWS_ACCESS_Key, click on add secret.
+2- repeat the same process for AWS_SECRET_ACCESS_KEY
 
 #### c) GitHub Environments
 In order to create a manual approval step in our deployment pipelines, we use [GitHub Environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment).
