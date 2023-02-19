@@ -22,7 +22,9 @@ arn:aws:codestar-connections:us-west-2:account_id:connection/aEXAMPLE-8aad-4d5d-
 In the above, `aEXAMPLE-8aad-4d5d-8878-dfcab0bc441f` is the unique Id for this connection. We'll be using this Id when we create our SageMaker project later in this example.
 
 ### Set up Secret Access Keys for GitHub Token
-We need to create a secret in AWS secret Manager that holds our GitHub personal access token. If you do not have a personal access token for GitHub, you need to create one following the instructions here: create personal access token
+We need to create a secret in AWS secret Manager that holds our GitHub personal access token. If you do not have a personal access token for GitHub, you need to create one following the instructions [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+
+> Note: You can create either classic or fine-grained access token. However, make sure the token has access to the *Contents* and *Actions* (workflows, runs and artifacts) for that repository.
 
 Then, go to the AWS Secrets Manager, click on Store a new secret, select “Other type of secret” for Choose Secret type, then give a name to your secret in the “key” and add your personal access token to its associated “value”- click next, type a name for your Secret name and click next and then store.
 
@@ -44,9 +46,13 @@ Copy the contents of the `seedcode` directory in the root of your github reposit
 
 
 #### b) Set up a GitHub Secrets containing your IAM user access key
-Got your GitHub repository- on the top of repository select Setting- then in the security section go to the Secrets and variables and choose Actions. Choose the New repository secret :
-1- Add the name AWS_ACCESS_KEY_ID and for Secret that you created for the IAM user in the [Create an IAM user for GitHub Actions](https://github.com/aws-samples/mlops-sagemaker-github-actions#create-an-iam-user-for-github-actions) step add your AWS_ACCESS_Key, click on add secret.
-2- repeat the same process for AWS_SECRET_ACCESS_KEY
+Got your GitHub repository - on the top of the repository, select Settings - then in the security section go to the Secrets and variables and choose Actions. Choose the New repository secret:
+
+> Note: This is the Access Key for the IAM user which you just created in the previous step.
+
+1. Add the name AWS_ACCESS_KEY_ID and for Secret that you created for the IAM user in the [Create an IAM user for GitHub Actions](https://github.com/aws-samples/mlops-sagemaker-github-actions#create-an-iam-user-for-github-actions) step add your AWS_ACCESS_Key, click on add secret.
+2. repeat the same process for AWS_SECRET_ACCESS_KEY
+
 
 #### c) GitHub Environments
 In order to create a manual approval step in our deployment pipelines, we use [GitHub Environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment).
@@ -100,6 +106,21 @@ For further reading on Lambda Layer, visit this [link](https://docs.aws.amazon.c
 
 
 ### Create a Custom Project Template in SageMaker
+At this stage we use the provided CloudFormation template to create a ServiceCatalog which helps us to create custom projects in SageMaker.
+
+Before creating the ServiceCatalog, in the `template.yml` file, change the `S3Bucket` to your bucket which you have uploaded the lambda zip file.
+
+```yaml
+GitHubWorkflowTriggerLambda:
+    ...
+    Code:
+        S3Bucket: <your bucket>
+        S3Key: lambda-github-workflow-trigger.zip
+    ...
+```
+Create or reuse your SageMaker Domain for the following steps. If you don't have a domain, use the instruction [here](https://docs.aws.amazon.com/sagemaker/latest/dg/onboard-quick-start.html) to create your domain with a *Quick Setup*.
+
+
 If the SageMaker-provided templates do not meet your needs (for example, you want to have more complex orchestration in the CodePipeline with multiple stages or custom approval steps), create your own templates.
 We recommend starting by using SageMaker-provided templates to understand how to organize your code and resources and build on top of it. https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-templates-custom.html
 
@@ -119,7 +140,7 @@ To do this, after you enable administrator access to the SageMaker templates,
 
  7. Choose **Upload a new product**.
 
- 8. For Product name¸ enter a name for your template. We chose **build-deploy-template**.
+ 8. For Product name¸ enter a name for your template. We chose **build-deploy-github**.
 
  9. For Description, enter **my custom build and deploy template**.
 
@@ -150,7 +171,7 @@ To do this, after you enable administrator access to the SageMaker templates,
 
  21. On the Constraints tab, choose **Create constraint**.
 
- 22. For Product, choose build-deploy-template (the product you just created).
+ 22. For Product, choose build-deploy-github (the product you just created).
 
  23. For Constraint type, choose Launch.
 
@@ -168,6 +189,7 @@ To do this, after you enable administrator access to the SageMaker templates,
 
 
 ## Launch your project
+
 In the previous sections, you prepared the Custom MLOps project environment. Now, let's create a project using this template.
 
 1. In the aws console, navigate to Amazon SageMaker Domains
@@ -198,6 +220,7 @@ In the previous sections, you prepared the Custom MLOps project environment. Now
         ...
     ```
 
+Now your environment is ready to go! You can start by exploring the `pipelines` directory, make changes and push those changes to your github repository, and see how all the steps of build and then deploy are automated.
 
 ## Security
 
