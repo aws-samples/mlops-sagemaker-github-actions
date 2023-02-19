@@ -13,7 +13,13 @@ The followings are prerequisites to completing the steps in this example:
 
 
 ### Set up a CodeStar Connection
-TBA
+If you don't have a CodeStar Connection to your GitHub account already, follow this [link](https://docs.aws.amazon.com/dtconsole/latest/userguide/connections-create-github.html) to create one.
+
+Your CodeStar Connection ARN will look like this:
+```
+arn:aws:codestar-connections:us-west-2:account_id:connection/aEXAMPLE-8aad-4d5d-8878-dfcab0bc441f
+```
+In the above, `aEXAMPLE-8aad-4d5d-8878-dfcab0bc441f` is the unique Id for this connection. We'll be using this Id when we create our SageMaker project later in this example.
 
 ### Set up Secret Access Keys for GitHub Token
 We need to create a secret in AWS secret Manager that holds our GitHub personal access token. If you do not have a personal access token for GitHub, you need to create one following the instructions here: create personal access token
