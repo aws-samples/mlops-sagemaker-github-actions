@@ -13,7 +13,13 @@ The followings are prerequisites to completing the steps in this example:
 
 
 ### Set up a CodeStar Connection
-TBA
+If you don't have a CodeStar Connection to your GitHub account already, follow this [link](https://docs.aws.amazon.com/dtconsole/latest/userguide/connections-create-github.html) to create one.
+
+Your CodeStar Connection ARN will look like this:
+```
+arn:aws:codestar-connections:us-west-2:account_id:connection/aEXAMPLE-8aad-4d5d-8878-dfcab0bc441f
+```
+In the above, `aEXAMPLE-8aad-4d5d-8878-dfcab0bc441f` is the unique Id for this connection. We'll be using this Id when we create our SageMaker project later in this example.
 
 ### Set up Secret Access Keys for GitHub Token
 We need to create a secret in AWS secret Manager that holds our GitHub personal access token. If you do not have a personal access token for GitHub, you need to create one following the instructions here: create personal access token
@@ -51,8 +57,47 @@ In order to create a manual approval step in our deployment pipelines, we use [G
 >Note: Environment feature is not available in some types of GitHub plans. Check the documentation [here](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment).
 
 
-### Create an AWS Lambda layer
-TBA
+### Deploy the Lambda function
+Simply zip the `lambda_function.py` and upload it to an S3 bucket.
+
+```sh
+cd lambda_functions/lambda_github_workflow_trigger
+zip lambda-github-workflow-trigger.zip lambda_function.py
+```
+Then upload the `lambda-github-workflow-trigger.zip` to a bucket which can be accessed later on by the ServiceCatalog.
+
+#### Create an AWS Lambda layer
+Now, let's create a Lambda layer for the dependencies of the lambda_function which we just uploaded.
+
+Create a python virtual environment and install the dependencies.
+```sh
+mkdir lambda_layer
+cd lambda_layer
+python3 -m venv .env
+source .env/bin/activate
+pip install pygithub
+deactivate
+```
+Now let's create our zip file.
+```sh
+mv .env/lib/python3.9/site-packages/ python
+zip -r layer.zip python
+```
+
+Publish the layer to AWS.
+```sh
+aws lambda publish-layer-version --layer-name python39-github-arm64 \
+    --description "Python3.9 pygithub" \
+    --license-info "MIT" \
+    --zip-file fileb://layer.zip \
+    --compatible-runtimes python3.9 \
+    --compatible-architectures "arm64"
+```
+Now, all of your functions can refer to this layer to satisfy their dependencies.
+
+
+For further reading on Lambda Layer, visit this [link](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html).
+
 
 ### Create a Custom Project Template in SageMaker
 If the SageMaker-provided templates do not meet your needs (for example, you want to have more complex orchestration in the CodePipeline with multiple stages or custom approval steps), create your own templates.
@@ -123,9 +168,35 @@ To do this, after you enable administrator access to the SageMaker templates,
 
 
 ## Launch your project
+In the previous sections, you prepared the Custom MLOps project environment. Now, let's create a project using this template.
 
-In the previous sections, you prepared the Custom MLOps project environment. The next step is to create a project using your new template.
-TBA
+1. In the aws console, navigate to Amazon SageMaker Domains
+2. Choose the domain that you want to create this project in.
+3. From the *Launch* menu choose *Studio*. You'll be redirected to the SageMaker Studio environment.
+4. In the Studio, from the left menu, under the *Deployments*, choose *Projects*
+5. Select *Create Project*.
+6. At the top of the list of templates, Choose *Organization templates*.
+7. If you have gone through all the previous steps successfully, you should be able to see a new custom project template named *build-deploy-github*. Select that template and click on *Select Project Template*.
+8. Besides to the Name and Description, you need to provide the following details:
+    - **Code Repository Info**: This is the owner of your GitHub Repository, e.g. for a repository at `https://github.com/pooyavahidi/my-repo`, the owner would be `pooyavahidi`.
+
+    - **GitHub Repository Name**: This is the name of the repository which you copied the *seedcode* in. It would be just the name of the repo. e.g. in `https://github.com/pooyavahidi/my-repo`, the repo is `my-repo`.
+
+    - **Codestar connection unique id**: This is the unique Id of the CodeStar connection which you created in the previous steps.
+    - **Name of the secret in the Secrets Manager which stores GitHub token**: This is the name of the *Secret* in the Secrets Manager which you have created and stored the GitHub Token.
+
+    - **GitHub workflow file for deployment. e.g. deploy.yml**: This is the name of the GitHub workflow file (at `.github/workflows/deploy.yml` location) where you have the deployment instructions. For this example, you can keep it as default which is `deploy.yml`
+
+9.  Click *Create Project*.
+10. After creating your project, make sure you update the `AWS_REGION` and `SAGEMAKER_PROJECT_NAME` environment variables in your GitHub Workflow files accordingly. Workflow files are in your GitHub repo (copied from seedcode), inside `.github/workflows` directory. Make sure you update both build.yml and deploy.yml files.
+
+    ```yaml
+        ...
+        env:
+          AWS_REGION: <region>
+          SAGEMAKER_PROJECT_NAME: <your project name>
+        ...
+    ```
 
 
 ## Security
