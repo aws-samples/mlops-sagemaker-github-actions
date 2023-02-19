@@ -57,8 +57,47 @@ In order to create a manual approval step in our deployment pipelines, we use [G
 >Note: Environment feature is not available in some types of GitHub plans. Check the documentation [here](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment).
 
 
-### Create an AWS Lambda layer
-TBA
+### Deploy the Lambda function
+Simply zip the `lambda_function.py` and upload it to an S3 bucket.
+
+```sh
+cd lambda_functions/lambda_github_workflow_trigger
+zip lambda-github-workflow-trigger.zip lambda_function.py
+```
+Then upload the `lambda-github-workflow-trigger.zip` to a bucket which can be accessed later on by the ServiceCatalog.
+
+#### Create an AWS Lambda layer
+Now, let's create a Lambda layer for the dependencies of the lambda_function which we just uploaded.
+
+Create a python virtual environment and install the dependencies.
+```sh
+mkdir lambda_layer
+cd lambda_layer
+python3 -m venv .env
+source .env/bin/activate
+pip install pygithub
+deactivate
+```
+Now let's create our zip file.
+```sh
+mv .env/lib/python3.9/site-packages/ python
+zip -r layer.zip python
+```
+
+Publish the layer to AWS.
+```sh
+aws lambda publish-layer-version --layer-name python39-github-arm64 \
+    --description "Python3.9 pygithub" \
+    --license-info "MIT" \
+    --zip-file fileb://layer.zip \
+    --compatible-runtimes python3.9 \
+    --compatible-architectures "arm64"
+```
+Now, all of your functions can refer to this layer to satisfy their dependencies.
+
+
+For further reading on Lambda Layer, visit this [link](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html).
+
 
 ### Create a Custom Project Template in SageMaker
 If the SageMaker-provided templates do not meet your needs (for example, you want to have more complex orchestration in the CodePipeline with multiple stages or custom approval steps), create your own templates.
