@@ -168,9 +168,35 @@ To do this, after you enable administrator access to the SageMaker templates,
 
 
 ## Launch your project
+In the previous sections, you prepared the Custom MLOps project environment. Now, let's create a project using this template.
 
-In the previous sections, you prepared the Custom MLOps project environment. The next step is to create a project using your new template.
-TBA
+1. In the aws console, navigate to Amazon SageMaker Domains
+2. Choose the domain that you want to create this project in.
+3. From the *Launch* menu choose *Studio*. You'll be redirected to the SageMaker Studio environment.
+4. In the Studio, from the left menu, under the *Deployments*, choose *Projects*
+5. Select *Create Project*.
+6. At the top of the list of templates, Choose *Organization templates*.
+7. If you have gone through all the previous steps successfully, you should be able to see a new custom project template named *build-deploy-github*. Select that template and click on *Select Project Template*.
+8. Besides to the Name and Description, you need to provide the following details:
+    - **Code Repository Info**: This is the owner of your GitHub Repository, e.g. for a repository at `https://github.com/pooyavahidi/my-repo`, the owner would be `pooyavahidi`.
+
+    - **GitHub Repository Name**: This is the name of the repository which you copied the *seedcode* in. It would be just the name of the repo. e.g. in `https://github.com/pooyavahidi/my-repo`, the repo is `my-repo`.
+
+    - **Codestar connection unique id**: This is the unique Id of the CodeStar connection which you created in the previous steps.
+    - **Name of the secret in the Secrets Manager which stores GitHub token**: This is the name of the *Secret* in the Secrets Manager which you have created and stored the GitHub Token.
+
+    - **GitHub workflow file for deployment. e.g. deploy.yml**: This is the name of the GitHub workflow file (at `.github/workflows/deploy.yml` location) where you have the deployment instructions. For this example, you can keep it as default which is `deploy.yml`
+
+9.  Click *Create Project*.
+10. After creating your project, make sure you update the `AWS_REGION` and `SAGEMAKER_PROJECT_NAME` environment variables in your GitHub Workflow files accordingly. Workflow files are in your GitHub repo (copied from seedcode), inside `.github/workflows` directory. Make sure you update both build.yml and deploy.yml files.
+
+    ```yaml
+        ...
+        env:
+          AWS_REGION: <region>
+          SAGEMAKER_PROJECT_NAME: <your project name>
+        ...
+    ```
 
 
 ## Security
