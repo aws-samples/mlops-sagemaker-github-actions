@@ -12,15 +12,23 @@ This is the [link](https://aws.amazon.com/blogs/machine-learning/build-an-end-to
 ## Prerequisites
 The followings are prerequisites to completing the steps in this example:
 
+### Set up an AWS CodeConnection
 
-### Set up a CodeStar Connection
-If you don't have a CodeStar Connection to your GitHub account already, follow this [link](https://docs.aws.amazon.com/dtconsole/latest/userguide/connections-create-github.html) to create one.
+If you haven’t already set up a CodeConnection to your GitHub account, follow this [link](https://docs.aws.amazon.com/dtconsole/latest/userguide/connections-create-github.html) to create one.
 
-Your CodeStar Connection ARN will look like this:
+Your CodeConnection ARN will look similar to this:
+
+```json
+{
+    "ConnectionArn": "arn:aws:codeconnections:us-west-2:account_id:connection/aEXAMPLE-8aad-4d5d-8878-dfcab0bc441f"
+}
 ```
-arn:aws:codestar-connections:us-west-2:account_id:connection/aEXAMPLE-8aad-4d5d-8878-dfcab0bc441f
-```
+
 In the above, `aEXAMPLE-8aad-4d5d-8878-dfcab0bc441f` is the unique Id for this connection. We'll be using this Id when we create our SageMaker project later in this example.
+
+#### Alternative to AWS CodeConnections
+
+As an alternative, you can use [GitHub CLI](https://docs.github.com/en/get-started/git-basics/caching-your-github-credentials-in-git#github-cli) or [Git Credential Manager](https://docs.github.com/en/get-started/git-basics/caching-your-github-credentials-in-git#git-credential-manager) to establish a connection and securely authenticate with GitHub. This is a secure and simple method that stores your credentials and eliminates the need to repeatedly enter your GitHub username and password or token.
 
 ### Set up Secret Access Keys for GitHub Token
 We need to create a secret in AWS secret Manager that holds our GitHub personal access token. If you do not have a personal access token for GitHub, you need to create one following the instructions [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
@@ -205,7 +213,7 @@ In the previous sections, you prepared the Custom MLOps project environment. Now
 
     - **GitHub Repository Name**: This is the name of the repository which you copied the *seedcode* in. It would be just the name of the repo. e.g. in `https://github.com/pooyavahidi/my-repo`, the repo is `my-repo`.
 
-    - **Codestar connection unique id**: This is the unique Id of the CodeStar connection which you created in the previous steps.
+    - **Codestar connection unique id**: This is the unique Id of the CodeConnection which you created in the previous steps.
     - **Name of the secret in the Secrets Manager which stores GitHub token**: This is the name of the *Secret* in the Secrets Manager which you have created and stored the GitHub Token.
 
     - **GitHub workflow file for deployment. e.g. deploy.yml**: This is the name of the GitHub workflow file (at `.github/workflows/deploy.yml` location) where you have the deployment instructions. For this example, you can keep it as default which is `deploy.yml`
@@ -230,4 +238,3 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 ## License
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
-
