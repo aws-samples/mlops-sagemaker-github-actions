@@ -39,7 +39,7 @@ jobs:
             --sagemaker-project-name "$SAGEMAKER_PROJECT_NAME"
 
       - name: Store configs to artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: config-files
           path: |
@@ -84,7 +84,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Load configs
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: config-files
 
